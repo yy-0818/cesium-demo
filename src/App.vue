@@ -2,8 +2,8 @@
 import * as Cesium from "cesium";
 import { onMounted } from "vue";
 onMounted(() => {
-  Cesium.Ion.defaultAccessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmMjc3NmUzNi1lZjg3LTRlMjYtYWJlYy0wMzkyOWY2Y2JiNzkiLCJpZCI6MTE5MDgyLCJpYXQiOjE2NzE3MjY4MjJ9.qc799X5fiB31WvOPAzn6GZeBELdStiVKoOQufYpBJME";
+  // Cesium.Ion.defaultAccessToken =
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmMjc3NmUzNi1lZjg3LTRlMjYtYWJlYy0wMzkyOWY2Y2JiNzkiLCJpZCI6MTE5MDgyLCJpYXQiOjE2NzE3MjY4MjJ9.qc799X5fiB31WvOPAzn6GZeBELdStiVKoOQufYpBJME";
   var custom = new Cesium.ArcGisMapServerImageryProvider({
     // url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
     url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer",
@@ -86,6 +86,7 @@ onMounted(() => {
     for (var i = 0; i < neighborhoodEntities.length; i++) {
       //每次循环到的数据都单独拿到
       var entity = neighborhoodEntities[i];
+      console.log(entity);
       //判断一下定义的多边形是否存在
       if (Cesium.defined(entity.polygon)) {
         // 使用kml邻域值作为实体名称
@@ -99,7 +100,7 @@ onMounted(() => {
         });
         // 告诉多边形为地形着色。 ClassificationType.CESIUM_3D_TILE 将为 3D 图块集着色，而 ClassificationType.BOTH 将为 3d 图块和地形着色（BOTH 是默认值）
         entity.polygon.classificationType = Cesium.ClassificationType.TERRAIN;
-        // 生成多边形中心,意思就是设置这个多边形的位置
+        // 生成多边形中心,  设置这个多边形的位置
         var polyPositions = entity.polygon.hierarchy.getValue(
           Cesium.JulianDate.now()
         ).positions;
@@ -108,6 +109,7 @@ onMounted(() => {
         // 设置在地球的表面
         polyCenter = Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(polyCenter);
         entity.position = polyCenter;
+
         // 生成每个多边形的标签
         entity.label = {
           text: entity.name,
@@ -195,7 +197,7 @@ onMounted(() => {
     }
   });
 
-  // 从czml文件加载模型路径
+  // 加载模型路径
   var dronePromise = Cesium.CzmlDataSource.load(
     "./assets/SampleData/sampleFlight.czml"
   );
